@@ -253,6 +253,12 @@ class Form(QDialog):
         bar = Bar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
         bar.add('属性', ATTR, v, is_more_utils=True)
 
+    def create_line_bar(self, v):
+        line = Line(self.TITLE_TEXT, self.TITLE_SUBTEXT)
+        line.add("属性", ATTR, v, is_smooth=True, mark_line=["max", "average"])
+        bar = Bar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
+        bar.add('属性', ATTR, v, is_more_utils=True)
+
         overlap = Overlap()
         overlap.add(line)
         overlap.add(bar)
