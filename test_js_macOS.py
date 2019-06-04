@@ -9,7 +9,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QWidget, QGridLayout, QLabel, QSpinBox, \
     QSpacerItem, QSizePolicy, QComboBox, QLineEdit
 from random import randint
-from pyecharts import Bar, Pie, Line, Overlap
+from pyecharts import Bar, Pie, Line, Overlap, Sankey
 from pyecharts_javascripthon.api import TRANSLATOR
 
 #TITLE_TEXT = "图表大标题"
@@ -108,8 +108,6 @@ class Form(QDialog):
         label_title = QLabel( '大标题'+ ':')
         self.gl.addWidget(label_title, 6, 0, 1, 2) #addWidget里的四个数字什么意思
         self.QLineEdit1 = QLineEdit()        #查询pyqt的文本输入框是什么控件
-        #self.QLineEdit1.setText(self.TITLE_TEXT)
-        #self.TITLE_TEXT=self.QLineEdit1.getTextMargins()
         self.QLineEdit1.setPlaceholderText(self.TITLE_TEXT)
         self.QLineEdit1.cursorMoveStyle='VisualMoveStyle'
         self.QLineEdit1.returnPressed.connect(self.reload_canvas)
@@ -129,7 +127,7 @@ class Form(QDialog):
         self.gl.addWidget(label_kind, 9, 0, 1, 2)
         self.combobox_type = QComboBox()
         self.combobox_type.currentIndexChanged.connect(self.reload_canvas)
-        self.combobox_type.addItems(['饼图', '柱状图', '折线图', '折线\柱状图'])
+        self.combobox_type.addItems(['饼图', '柱状图', '折线图', '折线\柱状图','Sankey'])
         self.gl.addWidget(self.combobox_type, 9, 1, 1, 2)
         
         #主题选择按钮
@@ -221,6 +219,8 @@ class Form(QDialog):
         elif self.combobox_type.currentIndex() == 3:
             # 折线、柱状图
             options = self.create_line_bar(v)
+        elif self.combobox_type.currentIndex() == 4:
+            options=self.create_sankey(v)
         else:
             return
         return options
@@ -252,13 +252,6 @@ class Form(QDialog):
         line.add("属性", ATTR, v, is_smooth=True, mark_line=["max", "average"])
         bar = Bar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
         bar.add('属性', ATTR, v, is_more_utils=True)
-
-    def create_line_bar(self, v):
-        line = Line(self.TITLE_TEXT, self.TITLE_SUBTEXT)
-        line.add("属性", ATTR, v, is_smooth=True, mark_line=["max", "average"])
-        bar = Bar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
-        bar.add('属性', ATTR, v, is_more_utils=True)
-
         overlap = Overlap()
         overlap.add(line)
         overlap.add(bar)
@@ -266,6 +259,26 @@ class Form(QDialog):
         options = snippet.as_snippet()
         return options
 
+    def create_sankey(self, v):
+        sankey = Sankey(self.TITLE_TEXT, self.TITLE_SUBTEXT)
+        
+        nodes = [
+            {'name': 'category1'}, {'name': 'category2'}, {'name': 'category3'},
+            {'name': 'category4'}, {'name': 'category5'}, {'name': 'category6'},
+        ]
+        links = [
+            {'source': 'category1', 'target': 'category2', 'value': 10},
+            {'source': 'category2', 'target': 'category3', 'value': 15},
+            {'source': 'category3', 'target': 'category4', 'value': 20},
+            {'source': 'category5', 'target': 'category6', 'value': 25}
+        ]
+
+        sankey.add( "sankey", nodes,links,line_opacity=0.2,line_curve=0.5,\
+            line_color="source",is_label_show=True,label_pos="right",)
+        
+        snippet = TRANSLATOR.translate(sankey.options)
+        options = snippet.as_snippet()
+        return options
 
 if __name__ == '__main__':
     import sys
