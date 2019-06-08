@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QWidget, QGridLa
 from random import randint
 from pyecharts import Bar, Pie, Line, Overlap, Sankey
 from pyecharts_javascripthon.api import TRANSLATOR
+import sys
 
 #TITLE_TEXT = "图表大标题"
 #TITLE_SUBTEXT = "副标题"
@@ -34,21 +35,25 @@ class Form(QDialog):
         self.hl = QHBoxLayout(self)
         self.widget = QWidget()
         self.gl = QGridLayout(self.widget)
-
+       
         # ATTR1
         #第一个输入属性值的文本框
-        label1 = QLabel(ATTR[0] + ':')
-        self.gl.addWidget(label1, 1 - 1, 0, 1, 1)
-        self.spinbox1 = QSpinBox()
-        self.spinbox1.setSingleStep(100)
+        self.QLineEdit1=QLineEdit()     # 新建属性输入文本框
+        self.QLineEdit1.setPlaceholderText(ATTR[1-1]) # 默认值是“属性一”
+        self.QLineEdit1.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit1,1 - 1,0,1,1)# 设置该输入框的排版位置
+        self.spinbox1 = QSpinBox()      # 新建SpinBox
+        self.spinbox1.setSingleStep(100)# 设置每次调节的单位
         self.spinbox1.setObjectName('spinbox')
         self.spinbox1.valueChanged.connect(self.set_options)
         self.spinbox1.setMaximum(1000)
         self.spinbox1.setValue(randint(0, 1000))
         self.gl.addWidget(self.spinbox1, 1 - 1, 1, 1, 2)
         # ATTR2
-        label2 = QLabel(ATTR[1] + ':')
-        self.gl.addWidget(label2, 2 - 1, 0, 1, 1)
+        self.QLineEdit2=QLineEdit()     
+        self.QLineEdit2.setPlaceholderText(ATTR[2-1]) 
+        self.QLineEdit2.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit2,2 - 1,0,1,1)
         self.spinbox2 = QSpinBox()
         self.spinbox2.setSingleStep(100)
         self.spinbox2.setObjectName('spinbox')
@@ -57,8 +62,10 @@ class Form(QDialog):
         self.spinbox2.setValue(randint(0, 1000))
         self.gl.addWidget(self.spinbox2, 2 - 1, 1, 1, 2)
         # ATTR3
-        label3 = QLabel(ATTR[2] + ':')
-        self.gl.addWidget(label3, 3 - 1, 0, 1, 1)
+        self.QLineEdit3=QLineEdit()     
+        self.QLineEdit3.setPlaceholderText(ATTR[3-1]) 
+        self.QLineEdit3.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit3,3 - 1,0,1,1)
         self.spinbox3 = QSpinBox()
         self.spinbox3.setSingleStep(100)
         self.spinbox3.setObjectName('spinbox')
@@ -67,8 +74,10 @@ class Form(QDialog):
         self.spinbox3.setValue(randint(0, 1000))
         self.gl.addWidget(self.spinbox3, 3 - 1, 1, 1, 2)
         # ATTR4
-        label4 = QLabel(ATTR[3] + ':')
-        self.gl.addWidget(label4, 4 - 1, 0, 1, 1)
+        self.QLineEdit4=QLineEdit()     
+        self.QLineEdit4.setPlaceholderText(ATTR[4-1]) 
+        self.QLineEdit4.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit4,4 - 1,0,1,1)
         self.spinbox4 = QSpinBox()
         self.spinbox4.setSingleStep(100)
         self.spinbox4.setObjectName('spinbox')
@@ -77,8 +86,10 @@ class Form(QDialog):
         self.spinbox4.setValue(randint(0, 1000))
         self.gl.addWidget(self.spinbox4, 4 - 1, 1, 1, 2)
         # ATTR5
-        label5 = QLabel(ATTR[4] + ':')
-        self.gl.addWidget(label5, 5 - 1, 0, 1, 1)
+        self.QLineEdit5=QLineEdit()     
+        self.QLineEdit5.setPlaceholderText(ATTR[5-1]) 
+        self.QLineEdit5.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit5,5 - 1,0,1,1)
         self.spinbox5 = QSpinBox()
         self.spinbox5.setSingleStep(100)
         self.spinbox5.setObjectName('spinbox')
@@ -87,8 +98,10 @@ class Form(QDialog):
         self.spinbox5.setValue(randint(0, 1000))
         self.gl.addWidget(self.spinbox5, 5 - 1, 1, 1, 2)
         # ATTR6
-        label6 = QLabel(ATTR[5] + ':')
-        self.gl.addWidget(label6, 6 - 1, 0, 1, 1)
+        self.QLineEdit6=QLineEdit()     
+        self.QLineEdit6.setPlaceholderText(ATTR[6-1]) 
+        self.QLineEdit6.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit6,6 - 1,0,1,1)
         self.spinbox6 = QSpinBox()
         self.spinbox6.setSingleStep(100)
         self.spinbox6.setObjectName('spinbox')
@@ -107,19 +120,19 @@ class Form(QDialog):
         #大标题
         label_title = QLabel( '大标题'+ ':')
         self.gl.addWidget(label_title, 6, 0, 1, 2) #addWidget里的四个数字什么意思
-        self.QLineEdit1 = QLineEdit()        #查询pyqt的文本输入框是什么控件
-        self.QLineEdit1.setPlaceholderText(self.TITLE_TEXT)
-        self.QLineEdit1.cursorMoveStyle='VisualMoveStyle'
-        self.QLineEdit1.returnPressed.connect(self.reload_canvas)
-        self.gl.addWidget(self.QLineEdit1, 6, 1, 1, 2)
+        self.QLineEdit_TITLE = QLineEdit()        #查询pyqt的文本输入框是什么控件
+        self.QLineEdit_TITLE.setPlaceholderText(self.TITLE_TEXT)
+        self.QLineEdit_TITLE.cursorMoveStyle='VisualMoveStyle'
+        self.QLineEdit_TITLE.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit_TITLE, 6, 1, 1, 2)
         #小标题
         label_subtitle = QLabel( '小标题'+ ':')
         self.gl.addWidget(label_subtitle, 7, 0, 1, 2)
-        self.QLineEdit2 = QLineEdit()        #查询pyqt的文本输入框是什么控件
-        self.QLineEdit2.setPlaceholderText(self.TITLE_TEXT)
-        self.QLineEdit2.cursorMoveStyle='VisualMoveStyle'
-        self.QLineEdit2.returnPressed.connect(self.reload_canvas)
-        self.gl.addWidget(self.QLineEdit2, 7, 1, 1, 2)
+        self.QLineEdit_SUB = QLineEdit()        #查询pyqt的文本输入框是什么控件
+        self.QLineEdit_SUB.setPlaceholderText(self.TITLE_TEXT)
+        self.QLineEdit_SUB.cursorMoveStyle='VisualMoveStyle'
+        self.QLineEdit_SUB.returnPressed.connect(self.reload_canvas)
+        self.gl.addWidget(self.QLineEdit_SUB, 7, 1, 1, 2)
         #输入大标题与副标题
 
         #图例种类选择
@@ -127,7 +140,7 @@ class Form(QDialog):
         self.gl.addWidget(label_kind, 9, 0, 1, 2)
         self.combobox_type = QComboBox()
         self.combobox_type.currentIndexChanged.connect(self.reload_canvas)
-        self.combobox_type.addItems(['饼图', '柱状图', '折线图', '折线\柱状图','Sankey'])
+        self.combobox_type.addItems(['饼图', '柱状图', '折线图', '折线\柱状图','桑基图'])
         self.gl.addWidget(self.combobox_type, 9, 1, 1, 2)
         
         #主题选择按钮
@@ -135,7 +148,8 @@ class Form(QDialog):
         self.gl.addWidget(label_theme, 10, 0, 1, 2)
         self.combobox_theme = QComboBox()
         self.combobox_theme.currentTextChanged.connect(self.change_theme)
-        self.combobox_theme.addItems(['light', 'dark'])
+        theme_sets=['日间模式', '暗黑模式','香槟','罗马']
+        self.combobox_theme.addItems(theme_sets)
         self.gl.addWidget(self.combobox_theme, 10, 1, 1, 2)
         # 添加web view
         self.view = QWebEngineView()
@@ -148,6 +162,15 @@ class Form(QDialog):
         options = self.get_options()
         if not options:
             return
+        if self.combobox_theme.currentIndex()==0:
+            theme='light'
+        if self.combobox_theme.currentIndex()==1:
+            theme='dark'
+        if self.combobox_theme.currentIndex()==2:
+            theme='vintage'
+        if self.combobox_theme.currentIndex()==3:
+            theme='roma'
+        
         self.view.page().runJavaScript(
             f'''
                 myChart.dispose();
@@ -159,14 +182,20 @@ class Form(QDialog):
         )
 
     def load_url(self):
-        url = QUrl('file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html') 
+        url = QUrl("file:///"+sys.path[0]+"/template.html")
         #the formal version:url = QUrl("file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html")
         self.view.load(url)
         self.view.loadFinished.connect(self.set_options)
 
     def reload_canvas(self):
-        self.TITLE_TEXT=self.QLineEdit1.displayText()
-        self.TITLE_SUBTEXT=self.QLineEdit2.displayText()
+        self.TITLE_TEXT=self.QLineEdit_TITLE.displayText()
+        self.TITLE_SUBTEXT=self.QLineEdit_SUB.displayText()
+        
+        #重新渲染时，将左侧属性输入框中数据传入图表
+        QLineEdit_Array=[self.QLineEdit1,self.QLineEdit2,self.QLineEdit3,self.QLineEdit4,self.QLineEdit5,self.QLineEdit6]
+        for i in range(len(QLineEdit_Array)):
+            ATTR[i]= QLineEdit_Array[i].displayText()  
+
         if not self.view:
             return
             # 重载画布
@@ -260,7 +289,7 @@ class Form(QDialog):
         options = snippet.as_snippet()
         return options
 
-    def create_sankey(self, v):
+    def create_sankey(self, v): #绘制桑基图
         sankey = Sankey(self.TITLE_TEXT, self.TITLE_SUBTEXT)
         
         nodes = [
@@ -280,6 +309,7 @@ class Form(QDialog):
         snippet = TRANSLATOR.translate(sankey.options)
         options = snippet.as_snippet()
         return options
+    
 
 if __name__ == '__main__':
     import sys
