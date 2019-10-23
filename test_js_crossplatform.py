@@ -3,6 +3,7 @@
 # @Author  : fangzeqiang_cover
 # @File    : test_js.py
 # pyechartsV0.5 pip3 install pyecharts==0.5.11
+# pip install PyQtWebEngine
 
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWebEngineWidgets import QWebEngineView
