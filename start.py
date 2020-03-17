@@ -176,8 +176,9 @@ class Form(QDialog):
         )
 
     def load_url(self):
-        url = QUrl("file:///"+sys.path[0]+"/template.html")
-        #the formal version:url = QUrl("file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html")
+        url = QUrl("file:///"+sys.path[0]+"/template.html") # to make it adapted to any platform like MacOS,Windows,Linux
+        print(url)
+        #the formal version: url = QUrl("file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html")
         self.view.load(url)
         self.view.loadFinished.connect(self.set_options)
 
