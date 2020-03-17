@@ -1,6 +1,7 @@
 # Tutorial
 
 Glad to see ya! 
+
 4 steps to make your wonderful charts are below :)
 
 ## Step1: Build & Install Git environment
@@ -16,8 +17,11 @@ Glad to see ya!
 - install python3.7
 
 - pip install the following packages online
+
     1. pyqt5
+
     2. pyecharts==0.5.11
+
     3. PyQtWebEngine
 
             pip3 install pyqt5
@@ -27,7 +31,9 @@ Glad to see ya!
 ## Step3:  Check File placement
 
 - templete.html
+
 - echarts.min.js
+
 - start.py
 
 ## Step4: execute script
@@ -38,5 +44,7 @@ Glad to see ya!
         python3 start.py
 
 ## Reference
+
 [PyQt Tutorial](https://www.cnblogs.com/archisama/p/5442071.html)
+
 [Original Project](https://blog.csdn.net/this_is_id/article/details/86688585)
