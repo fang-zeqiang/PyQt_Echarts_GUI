@@ -28,7 +28,7 @@ Glad to see ya!
             pip3 instal PyQtWebEngine
             pip3 install pyecharts==0.5.11
 
-## Step3:  Check File placement
+## Step3:  Check File Placement
 
 - templete.html
 
@@ -36,7 +36,7 @@ Glad to see ya!
 
 - start.py
 
-## Step4: execute script
+## Step4: Execute Script
 
 - open terminal
     
