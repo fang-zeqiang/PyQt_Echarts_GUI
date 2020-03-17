@@ -1,6 +1,4 @@
-# PyQt_Echarts_GUI
-
-# Tutorial for PyQt5_Echarts_GUI
+# Tutorial
 
 Glad to see ya! 
 4 steps to make your wonderful charts are below :)
