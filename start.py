@@ -10,8 +10,25 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QWidget, QGridLayout, QLabel, QSpinBox, \
     QSpacerItem, QSizePolicy, QComboBox, QLineEdit
 from random import randint
-from pyecharts import Bar, Pie, Line, Overlap, Sankey
+from pyecharts import Bar, Pie, Line, Overlap, Sankey, Radar, Map
 from pyecharts_javascripthon.api import TRANSLATOR
+import csv
+
+### 数据预处理
+with open("/Users/fangzeqiang/Desktop/毕业设计/【3.18】本科/定稿/提交附件/功能性可视化程序/data/job_skills.csv",encoding="utf-8") as file:
+    datas=list(csv.DictReader(file))
+country_counts=dict()
+for d in datas:
+    country=d['Location'].split(",")[-1].strip()
+    if country in country_counts.keys():
+        country_counts[country]+=1
+    else:
+        country_counts[country]=1
+country_counts['United States']+=country_counts.pop('USA')
+country_counts['United Arab Emirates']=country_counts.pop('Dubai - United Arab Emirates')
+country_counts['China']+=country_counts.pop("Taiwan")+country_counts.pop("Hong Kong")
+country_counts_sorted=sorted(country_counts.items(),key=lambda x:x[1],reverse=True)
+### 数据预处理
 
 class Form(QDialog):
 
@@ -26,12 +43,14 @@ class Form(QDialog):
         self.echarts = False
         self.initUi()
         self.load_url()
+        self.isMap = False
 
     # 初始化UI界面
     def initUi(self):
         self.hl = QHBoxLayout(self)
         self.widget = QWidget()
         self.gl = QGridLayout(self.widget)
+        self.isMap = False
        
         # ATTR1
         #第一个输入属性值的文本框
@@ -137,7 +156,7 @@ class Form(QDialog):
         self.gl.addWidget(label_kind, 9, 0, 1, 2)
         self.combobox_type = QComboBox()
         self.combobox_type.currentIndexChanged.connect(self.reload_canvas)
-        self.combobox_type.addItems(['饼状图', '柱状图', '折线图', '折线柱状图','桑基图'])
+        self.combobox_type.addItems(['饼状图', '柱状图', '折线图', '折线柱状图','桑基图','雷达图','地理热点图'])
         self.gl.addWidget(self.combobox_type, 9, 1, 1, 2)
         
         #主题选择按钮
@@ -153,6 +172,7 @@ class Form(QDialog):
         self.hl.addWidget(self.view)
 
     def change_theme(self, theme):
+        # self.isMap = False
         if not self.view:
             return
         options = self.get_options()
@@ -176,9 +196,9 @@ class Form(QDialog):
         )
 
     def load_url(self):
+        #url = QUrl("file:///"+sys.path[0]+"/data/STEM_heatmap.html")
         url = QUrl("file:///"+sys.path[0]+"/template.html") # to make it adapted to any platform like MacOS,Windows,Linux
-        print(url)
-        #the formal version: url = QUrl("file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html")
+            #the formal version: url = QUrl("file:////Users/fangzeqiang/Desktop/PyQt_Echarts_GUI/template.html")
         self.view.load(url)
         self.view.loadFinished.connect(self.set_options)
 
@@ -245,9 +265,16 @@ class Form(QDialog):
         elif self.combobox_type.currentIndex() == 3:
             # 折线、柱状图
             options = self.create_line_bar(v)
-            # 桑基图
         elif self.combobox_type.currentIndex() == 4:
+            # 桑基图
             options=self.create_sankey(v)
+        elif self.combobox_type.currentIndex() == 5:
+            # 雷达图
+            options=self.create_radar(v)
+        elif self.combobox_type.currentIndex() == 6:
+            # 地理热点图
+            # options=self.create_map(v)
+            return
         else:
             return
         return options
@@ -261,8 +288,10 @@ class Form(QDialog):
 
     def create_bar(self, v):
         bar = Bar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
-        bar.add('属性1', self.ATTR, v, is_more_utils=True)
-        bar.add('属性2', self.ATTR, v, is_more_utils=True)
+        bar.add('Science', self.ATTR, v, is_more_utils=True)
+        bar.add('Engineering', self.ATTR, v, is_more_utils=True)
+        bar.add('Technology', self.ATTR, v, is_more_utils=True)
+        bar.add('Mathematics', self.ATTR, v, is_more_utils=True)
         snippet = TRANSLATOR.translate(bar.options)
         options = snippet.as_snippet()
         return options
@@ -287,21 +316,41 @@ class Form(QDialog):
         return options
 
     def create_sankey(self, v): #绘制桑基图
-        sankey = Sankey(self.TITLE_TEXT, self.TITLE_SUBTEXT)
+        sankey = Sankey(self.TITLE_TEXT, self.TITLE_SUBTEXT,width=1200, height=600)
         category1,category2,category3,category4,category5,category6=self.ATTR[0],self.ATTR[1],self.ATTR[2],self.ATTR[3],self.ATTR[4],self.ATTR[5]
 
         nodes = [
-            {'name': category1}, {'name': category2}, {'name': category3},
-            {'name': category4}, {'name': category5}, {'name': category6}
+            {'name': 'Java软件开发'}, {'name': '前端技术'}, {'name': '移动端技术'},
+            {'name': '自然语言处理'}, {'name': 'Python数据分析'}, {'name': '数据可视化'},
+            {'name': '量化交易'},{'name': '算法工程'},{'name': '算法优化'},
+            {'name': '机器学习开发'},{'name': '运维工程'},{'name': '云计算开发'},
+            {'name': '软件UI设计'},{'name': '计算机视觉'},{'name': '产品经理'},{'name': '深度学习'}
         ]
         links = [
-            {'source': category1, 'target': category2, 'value': 10},
-            {'source': category2, 'target': category3, 'value': 15},
-            {'source': category3, 'target': category4, 'value': 20},
-            {'source': category5, 'target': category6, 'value': 25}
+            {'source': 'Java软件开发', 'target': '前端技术', 'value': 5},
+            {'source': '前端技术', 'target': '移动端技术', 'value': 12},
+            {'source': 'Python数据分析', 'target': '自然语言处理', 'value': 10},
+            {'source': 'Python数据分析', 'target': '数据可视化', 'value': 8},
+            {'source': '自然语言处理', 'target': '算法工程', 'value': 15},
+            {'source': '算法工程', 'target': '算法优化', 'value': 15},
+            {'source': '自然语言处理', 'target': '算法优化', 'value': 30},
+            {'source': '量化交易', 'target': '算法优化', 'value': 10},
+            {'source': '自然语言处理', 'target': '移动端技术', 'value': 14},
+            {'source': '机器学习开发', 'target': '自然语言处理', 'value': 14},
+            {'source': '机器学习开发', 'target': '算法工程', 'value': 20},
+            {'source': '软件UI设计', 'target': '移动端技术', 'value': 15},
+            {'source': '深度学习', 'target': '计算机视觉', 'value': 12},
+            {'source': '计算机视觉', 'target': '算法优化', 'value': 10},
+            {'source': '运维工程', 'target': '云计算开发', 'value': 15},
+            {'source': '前端技术', 'target': '云计算开发', 'value': 20},
+            {'source': '云计算开发', 'target': '产品经理', 'value': 3},
+            {'source': '移动端技术', 'target': '产品经理', 'value': 10},
+            {'source': '算法优化', 'target': '产品经理', 'value': 7},
+            {'source': '计算机视觉', 'target': '产品经理', 'value': 6},
+            {'source': '数据可视化', 'target': '产品经理', 'value': 5},
         ]
         sankey.add(
-            "sankey",
+            "技能树",
             nodes,
             links,
             line_opacity=0.2,
@@ -313,7 +362,50 @@ class Form(QDialog):
         snippet = TRANSLATOR.translate(sankey.options)
         options = snippet.as_snippet()
         return options
-    
+
+    def create_radar(self, v): #绘制雷达图
+        radar = Radar(self.TITLE_TEXT, self.TITLE_SUBTEXT)
+        schema = [
+            ("口头语言", 5), ("原创性", 5), ("问题敏感度", 5),
+            ("逻辑思维", 5), ("数学能力", 5), ("人际沟通", 5)
+        ]
+        radar.config(schema)
+        v1 = [v]
+        v2 = [[2,3,5,4,2,1]]
+        radar.add(
+            "第一次推荐输入", 
+            v1,
+            is_splitline = True, 
+            is_axisline_show = True,
+            is_label_show=True,
+            area_opacity = 0.2
+        )
+        radar.add(
+            "第二次推荐输入", 
+            v2, 
+            label_color=["#4e79a7"], 
+            is_area_show= False,
+            legend_selectedmode='single',
+            area_opacity = 0.5
+        )
+        snippet = TRANSLATOR.translate(radar.options)
+        options = snippet.as_snippet()
+        return options
+
+    def create_map(self, v): #绘制地理地图！
+        self.isMap = True
+        '''
+        from pyecharts import Map
+        attr = country_counts.keys()
+        value = country_counts.values()
+        map = Map("STEM不同地区职业需求")
+        map.add("STEM职业需求量", attr, value, maptype="world", is_visualmap=True, visual_text_color='#000')
+
+        snippet = TRANSLATOR.translate(map.options)
+        options = snippet.as_snippet()
+        print(options)
+        return options
+        '''
 
 if __name__ == '__main__':
     import sys

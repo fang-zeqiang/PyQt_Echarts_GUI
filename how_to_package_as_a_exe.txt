@@ -1,1 +1,0 @@
-pyinstaller C:/Users/FZQ/Desktop/PyQt_Echarts_GUI/test_js_win64x.py --onefile
