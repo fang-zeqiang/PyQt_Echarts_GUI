@@ -4,6 +4,7 @@
 # @File    : test_js.py
 # pyechartsV0.5 pip3 install pyecharts==0.5.11
 # pip install PyQtWebEngine
+# pip install PyQt5
 
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -15,7 +16,7 @@ from pyecharts_javascripthon.api import TRANSLATOR
 import csv
 
 ### 数据预处理
-with open("/Users/fangzeqiang/Desktop/毕业设计/【3.18】本科/定稿/提交附件/功能性可视化程序/data/job_skills.csv",encoding="utf-8") as file:
+with open("data/job_skills.csv",encoding="utf-8") as file:
     datas=list(csv.DictReader(file))
 country_counts=dict()
 for d in datas:
