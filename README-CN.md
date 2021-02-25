@@ -26,7 +26,7 @@
 
 - 安装 python3.7 
 
-- 使用pip命令安装以下包，如果因网络原因安装不成功可以在[这个目录](/site-packages)下找到对应包手动安装
+- 使用[pip]([Python pip 安装与使用 | 菜鸟教程 (runoob.com)](https://www.runoob.com/w3cnote/python-pip-install-usage.html))命令安装以下包，如果因网络原因安装不成功可以在[这个目录](/site-packages)下找到对应包手动安装
   
   1. PyQt5 (不用担心PyQt5的版本问题，保持大小写进行安装)
   
@@ -53,6 +53,7 @@
 - 打开终端
   
   输入以下代码来启动程序
+  
   ```bash
     cd PyQt_Echarts_GUI
     python3 start.py
@@ -61,17 +62,20 @@
 ## 最终效果
 
 ### 1. 图表类型间的相互切换
+
 ![效果4](/img/image32.gif)
 
 ### 2. 桑基图呈现
+
 ![效果3](/img/image34.gif)
 
 ### 3. 柱图线图切换呈现
+
 ![效果1](/img/image36.gif)
 
 ### 4. 雷达图呈现
-![效果2](/img/image35.gif)
 
+![效果2](/img/image35.gif)
 
 ## 参考资料
 
