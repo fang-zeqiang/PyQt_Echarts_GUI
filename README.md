@@ -14,7 +14,7 @@ Glad to see you!
 
 - then you can clone my package from github like code below
   
-  git clone https://github.com/Hereislittlemushroom/PyQt_Echarts_GUI.git
+  git clone https://github.com/fang-zeqiang/PyQt_Echarts_GUI.git
 
 **OR**
 
